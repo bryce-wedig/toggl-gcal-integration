@@ -18,4 +18,6 @@ public class TogglConstants {
 
     // tokens
     public static final String TOKEN_ID = ":{id}";
+    public static final String TOKEN_PROJECT_ID = ":{project_id}";
+    public static final String TOKEN_WORKSPACE_ID = ":{workspace_id}";
 }
