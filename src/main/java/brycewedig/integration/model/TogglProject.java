@@ -1,7 +1,9 @@
 package brycewedig.integration.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class TogglProject {
 
     @JsonProperty(required = true) private long id;

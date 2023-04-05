@@ -38,7 +38,7 @@ public class TogglService {
             if (response.body() != null) {
                 if (response.code() == HTTP_OK) {
                     return mapper.readValue(response.body().string(), TogglProject.class);
-                } else throw new TogglException(response.body().string());
+                } else throw new TogglException(response.code() + ": " + response.body().string());
             } else throw new TogglException(ERROR_NULL_RESPONSE_BODY);
         } catch (IOException e) { throw new TogglException(e.getMessage(), e); }
     }

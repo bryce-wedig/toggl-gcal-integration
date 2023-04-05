@@ -1,10 +1,12 @@
 package brycewedig.integration.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class TogglTimeEntry {
 
     @JsonProperty(required = true) private long id;

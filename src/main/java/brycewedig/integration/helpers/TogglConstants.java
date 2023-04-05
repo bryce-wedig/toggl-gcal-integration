@@ -3,7 +3,7 @@ package brycewedig.integration.helpers;
 public class TogglConstants {
 
     // API version
-    public static final String API_VERSION = "v2";
+    public static final String API_VERSION = "v9";
 
     // HTTP codes
     public static final int HTTP_OK = 200;
