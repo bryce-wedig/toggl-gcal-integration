@@ -13,14 +13,16 @@ public class TogglTimeEntry {
     @JsonProperty(required = true) private long project_id;
     @JsonProperty(required = true) private LocalDateTime start;
     @JsonProperty(required = true) private LocalDateTime stop;
+    @JsonProperty(required = true) private String server_deleted_at;
 
     // constructors
     public TogglTimeEntry() {}
-    public TogglTimeEntry(long id, long project_id, LocalDateTime start, LocalDateTime stop) {
+    public TogglTimeEntry(long id, long project_id, LocalDateTime start, LocalDateTime stop, String server_deleted_at) {
         this.id = id;
         this.project_id = project_id;
         this.start = start;
         this.stop = stop;
+        this.server_deleted_at = server_deleted_at;
     }
 
     // getters and setters
@@ -56,13 +58,22 @@ public class TogglTimeEntry {
         this.stop = stop;
     }
 
+    public String getServer_deleted_at() {
+        return server_deleted_at;
+    }
+
+    public void setServer_deleted_at(String server_deleted_at) {
+        this.server_deleted_at = server_deleted_at;
+    }
+
     @Override
     public String toString() {
-        return "TimeEntry{" +
+        return "TogglTimeEntry{" +
                 "id=" + id +
                 ", project_id=" + project_id +
                 ", start=" + start +
                 ", stop=" + stop +
+                ", server_deleted_at='" + server_deleted_at + '\'' +
                 '}';
     }
 

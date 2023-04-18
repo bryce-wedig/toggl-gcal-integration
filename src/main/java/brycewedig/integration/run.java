@@ -1,11 +1,17 @@
 package brycewedig.integration;
 
 import brycewedig.integration.exceptions.TogglException;
+import brycewedig.integration.helpers.JsonHelper;
 import brycewedig.integration.helpers.TogglAuthInterceptor;
 import brycewedig.integration.model.TogglProject;
+import brycewedig.integration.model.TogglTimeEntry;
 import brycewedig.integration.services.TogglService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import okhttp3.OkHttpClient;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class run {
 
@@ -21,10 +27,24 @@ public class run {
         long projectId = 185616065;
 
         try {
-            TogglProject togglProject = togglService.getTogglProject(workspaceId, projectId);
+            TogglProject togglProject = togglService.getProject(workspaceId, projectId);
             System.out.println(togglProject);
         } catch (TogglException e) {
             throw new RuntimeException(e);
         }
+
+        File file = new File("toggl-gcal-integration.json");
+
+        try {
+            LocalDateTime lastSuccessfulRunTime = JsonHelper.getLastSuccessfulRunTime(file);
+            String togglToken = JsonHelper.getTogglToken(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // TODO query toggl for time-tracking entries created since last successful run time
+        List<TogglTimeEntry> timeEntriesToCreate = togglService.getTimeEntries();
+
+        // TODO create corresponding events in gcal on specific calendar with specific naming convention
     }
 }
