@@ -9,52 +9,56 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class TogglTimeEntry {
 
-    @JsonProperty(required = true) private long id;
-    @JsonProperty(required = true) private long project_id;
-    @JsonProperty(required = true) private LocalDateTime start;
-    @JsonProperty(required = true) private LocalDateTime stop;
+    @JsonProperty(required = true) private Long id;
+    @JsonProperty(required = true) private Long project_id;
+    @JsonProperty(required = true) private String start;
+    @JsonProperty(required = true) private String stop;
     @JsonProperty(required = true) private String server_deleted_at;
+    @JsonProperty(required = true) private String description;
+    @JsonProperty private String projectName;
 
     // constructors
     public TogglTimeEntry() {}
-    public TogglTimeEntry(long id, long project_id, LocalDateTime start, LocalDateTime stop, String server_deleted_at) {
+    public TogglTimeEntry(Long id, Long project_id, String start, String stop, String server_deleted_at, String description, String projectName) {
         this.id = id;
         this.project_id = project_id;
         this.start = start;
         this.stop = stop;
         this.server_deleted_at = server_deleted_at;
+        this.description = description;
+        this.projectName = projectName;
     }
 
     // getters and setters
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getProject_id() {
+    public Long getProject_id() {
         return project_id;
     }
 
-    public void setProject_id(long project_id) {
+    public void setProject_id(Long project_id) {
         this.project_id = project_id;
     }
 
-    public LocalDateTime getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public LocalDateTime getStop() {
+    public String getStop() {
         return stop;
     }
 
-    public void setStop(LocalDateTime stop) {
+    public void setStop(String stop) {
         this.stop = stop;
     }
 
@@ -66,27 +70,24 @@ public class TogglTimeEntry {
         this.server_deleted_at = server_deleted_at;
     }
 
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public String getProjectName() { return projectName; }
+
+    public void setProjectName(String projectName) { this.projectName = projectName; }
+
     @Override
     public String toString() {
         return "TogglTimeEntry{" +
                 "id=" + id +
                 ", project_id=" + project_id +
-                ", start=" + start +
-                ", stop=" + stop +
+                ", start='" + start + '\'' +
+                ", stop='" + stop + '\'' +
                 ", server_deleted_at='" + server_deleted_at + '\'' +
+                ", description='" + description + '\'' +
+                ", projectName='" + projectName + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TogglTimeEntry togglTimeEntry = (TogglTimeEntry) o;
-        return id == togglTimeEntry.id && project_id == togglTimeEntry.project_id && Objects.equals(start, togglTimeEntry.start) && Objects.equals(stop, togglTimeEntry.stop);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, project_id, start, stop);
     }
 }

@@ -30,9 +30,9 @@ public class TogglService {
     }
 
     // https://developers.track.toggl.com/docs/api/time_entries
-    public List<TogglTimeEntry> getTimeEntries(LocalDateTime since) throws TogglException {
+    public List<TogglTimeEntry> getTimeEntries(long since) throws TogglException {
         Request request = new Request.Builder()
-                .url(ENDPOINT_GET_TIME_ENTRIES)
+                .url(ENDPOINT_GET_TIME_ENTRIES + "?since=" + since)
                 .build();
         Call call = client.newCall(request);
 

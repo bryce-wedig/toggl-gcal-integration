@@ -6,22 +6,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class TogglProject {
 
-    @JsonProperty(required = true) private long id;
+    @JsonProperty(required = true) private Long id;
     @JsonProperty(required = true) private String name;
 
     // constructors
     public TogglProject() {}
-    public TogglProject(long id, String name) {
+    public TogglProject(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     // getters and setters
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
