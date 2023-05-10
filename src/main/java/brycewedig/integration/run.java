@@ -18,17 +18,14 @@ import java.util.Objects;
 
 public class run {
 
-    private static final String TOKEN = "c09456837aeac76823b1109c29d441f1";
-
     public static void main(String[] args) {
 
-        long workspaceId = 5077210L;
-
-        File file = new File("toggl-gcal-integration.json");
+        File file = new File("src/main/resources/toggl-gcal-integration.json");
 
         try {
             LocalDateTime lastSuccessfulRunTime = JsonHelper.getLastSuccessfulRunTime(file);
             String togglToken = JsonHelper.getTogglToken(file);
+            long workspaceId = JsonHelper.getWorkspaceId(file);
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .addInterceptor(new TogglAuthInterceptor(togglToken)).build();

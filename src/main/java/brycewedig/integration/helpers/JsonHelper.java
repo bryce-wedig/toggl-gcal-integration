@@ -27,8 +27,10 @@ public class JsonHelper {
         return json.get("toggl_token").toString();
     }
 
-    // TODO get gcal auth information
-
+    public static long getWorkspaceId(File file) throws IOException {
+        JSONObject json = readJson(file);
+        return (long) json.get("workspace_id");
+    }
 
     // TODO write to json file, make sure this overwrites the entire file
     public static void writeToJson(File file, JSONObject jsonObject) throws IOException {
