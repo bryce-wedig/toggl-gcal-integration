@@ -32,7 +32,7 @@ public class GCalService {
 
     public static void createEvent(Calendar service, TogglTimeEntry togglTimeEntry, String calendarId, String timezone) {
         Event event = new Event()
-                .setSummary(togglTimeEntry.getProjectName() + " - " + togglTimeEntry.getDescription());
+                .setSummary(togglTimeEntry.getDescription() + " - " + togglTimeEntry.getProjectName());
 
         // set start time
         DateTime startDateTime = new DateTime(togglTimeEntry.getStart());

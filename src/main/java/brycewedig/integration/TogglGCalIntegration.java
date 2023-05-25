@@ -37,7 +37,7 @@ public class TogglGCalIntegration {
 
     public static void main(String[] args) {
 
-        File file = new File("src/main/resources/toggl-gcal-integration.json");
+        File file = new File("toggl-gcal-integration.json");
 
         try {
             LocalDateTime lastSuccessfulRunTime = JsonHelper.getLocalDateTime(file, LAST_SUCCESSFUL_RUN_TIME);
@@ -58,6 +58,9 @@ public class TogglGCalIntegration {
 
             // ignore any deleted items
             timeEntriesToCreate.removeIf(timeEntry -> timeEntry.getServer_deleted_at() != null);
+
+            // ignore any that are currently running
+            timeEntriesToCreate.removeIf(timeEntry -> timeEntry.getStop() == null);
 
 //            timeEntriesToCreate.forEach(System.out::println);
 
@@ -114,6 +117,10 @@ public class TogglGCalIntegration {
 
                 GCalService.createEvent(service, timeEntry, calendarId, timezone);
             }
+
+            // set last successful run time
+            LocalDateTime now = LocalDateTime.now();
+            JsonHelper.setString(file, LAST_SUCCESSFUL_RUN_TIME, String.valueOf(now));
 
         } catch (IOException | TogglException | GeneralSecurityException e) {
             throw new RuntimeException(e);
