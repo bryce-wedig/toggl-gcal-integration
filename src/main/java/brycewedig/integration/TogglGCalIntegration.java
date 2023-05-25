@@ -5,27 +5,44 @@ import brycewedig.integration.helpers.JsonHelper;
 import brycewedig.integration.helpers.TogglAuthInterceptor;
 import brycewedig.integration.model.TogglProject;
 import brycewedig.integration.model.TogglTimeEntry;
+import brycewedig.integration.services.GCalService;
 import brycewedig.integration.services.TogglService;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.calendar.Calendar;
 import okhttp3.OkHttpClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class run {
+public class TogglGCalIntegration {
+
+    private static final String APPLICATION_NAME = "toggl-gcal-integration";
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+    // toggl-gcal-integration keys
+    private static final String TOGGL_TOKEN = "togglToken";
+    private static final String LAST_SUCCESSFUL_RUN_TIME = "lastSuccessfulRunTime";
+    private static final String TOGGL_WORKSPACE_ID = "togglWorkspaceId";
+    private static final String CALENDAR_ID = "calendarId";
+    private static final String TIMEZONE = "timezone";
+    // http://www.timezoneconverter.com/cgi-bin/zonehelp.tzc?cc=US&ccdesc=United%20States
 
     public static void main(String[] args) {
 
         File file = new File("src/main/resources/toggl-gcal-integration.json");
 
         try {
-            LocalDateTime lastSuccessfulRunTime = JsonHelper.getLastSuccessfulRunTime(file);
-            String togglToken = JsonHelper.getTogglToken(file);
-            long workspaceId = JsonHelper.getWorkspaceId(file);
+            LocalDateTime lastSuccessfulRunTime = JsonHelper.getLocalDateTime(file, LAST_SUCCESSFUL_RUN_TIME);
+            String togglToken = JsonHelper.getString(file, TOGGL_TOKEN);
+            long workspaceId = JsonHelper.getLong(file, TOGGL_WORKSPACE_ID);
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .addInterceptor(new TogglAuthInterceptor(togglToken)).build();
@@ -66,19 +83,39 @@ public class run {
                         correspondingProject = togglProject;
                     }
                 }
-                timeEntry.setProjectName(correspondingProject.getName());
+                if (correspondingProject != null) {
+                    timeEntry.setProjectName(correspondingProject.getName());
+                }
             }
+
+            // https://developers.google.com/calendar/api/guides/create-events#java
+            // https://developers.google.com/calendar/api/v3/reference/events
+
+            // build a new authorized API client service
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            Calendar service =
+                    new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, GCalService.getCredentials(HTTP_TRANSPORT))
+                            .setApplicationName(APPLICATION_NAME)
+                            .build();
+
+            String calendarId = JsonHelper.getString(file, CALENDAR_ID);
+            String timezone = JsonHelper.getString(file, TIMEZONE);
+
+            // TODO query for calendar events created in the last week
+
+            // TODO compare their descriptions against ids of time entries
+
+            // TODO for any time entries that don't yet have calendar events, create them
+
+            // TODO for any time entries that have calendar events, make the appropriate update to the calendar event
 
             for (TogglTimeEntry timeEntry : timeEntriesToCreate) {
                 System.out.println(timeEntry.getDescription() + " - " + timeEntry.getProjectName());
+
+                GCalService.createEvent(service, timeEntry, calendarId, timezone);
             }
 
-            // TODO create corresponding events in gcal on specific calendar with specific naming convention
-
-            // https://developers.google.com/calendar/api/quickstart/java
-            // https://developers.google.com/calendar/api/guides/create-events#java
-
-        } catch (IOException | TogglException e) {
+        } catch (IOException | TogglException | GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
     }
