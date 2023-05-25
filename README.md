@@ -1,6 +1,6 @@
 # Integration between Toggl time tracker and Google Calendar
 
-Create Google Calendar events for Toggl time entries
+Creates Google Calendar events for Toggl time entries
 
 ## Configuration notes
 
