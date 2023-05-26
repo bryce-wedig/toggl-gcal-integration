@@ -22,5 +22,5 @@ where the `calendarId` is retrieved from the calendar's settings ("Integrate cal
 - Because the script is running on a headless server, execute the program locally and grant the application permission to generate the `tokens/StoredCredential`, then move that directory and its contents to the jar directory
 - Schedule the jar to be run via a shell script using `cron`: for every hour,
 ```
-0 * * * * /usr/bin/sh /home/ubuntu/toggl-gcal-integration/run_toggl_gcal_integration.sh
+0 * * * * /usr/bin/sh /home/ubuntu/toggl-gcal-integration/run_toggl_gcal_integration.sh >> cron.log 2>&1
 ```
