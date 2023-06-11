@@ -2,7 +2,9 @@
 /tokens
 /target
 src/main/resources
+
 toggl-gcal-integration.json
+notes.md
 
 # Compiled class file
 *.class
